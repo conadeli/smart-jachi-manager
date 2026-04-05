@@ -220,15 +220,20 @@ export async function POST(request: NextRequest) {
     }
 
     const slug = `${feature}-${Date.now()}`
-    supabaseAdmin.from('questions').insert({
+    
+    // ✅ 수정: await 추가 + 에러 처리 개선
+    const { error: insertError } = await supabaseAdmin.from('questions').insert({
       title,
       content: JSON.stringify({ input: data, result: parsed }),
       category: feature,
       slug,
       cache_key: cacheKey,
-    }).then(({ error }) => {
-      if (error) console.error('Archive save error:', error)
     })
+
+    if (insertError) {
+      console.error('Archive save error:', insertError)
+      // 에러가 있어도 응답은 정상 반환 (사용자에게 영향 없음)
+    }
 
     return NextResponse.json({
       ...parsed,

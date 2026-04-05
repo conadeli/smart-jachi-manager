@@ -1,4 +1,3 @@
-// app/archive/page.tsx
 import Link from 'next/link'
 import { supabase, CATEGORY_LABEL, CATEGORY_EMOJI, Question } from '@/lib/supabase'
 
@@ -9,20 +8,37 @@ export const metadata = {
 
 export const revalidate = 60 // 1분마다 재검증
 
-async function getQuestions(): Promise<Question[]> {
-  const { data, error } = await supabase
+async function getQuestions(category?: string): Promise<Question[]> {
+  let query = supabase
     .from('questions')
     .select('*')
     .order('created_at', { ascending: false })
     .limit(50)
 
-  if (error) { console.error(error); return [] }
+  // ✅ 카테고리 필터 추가
+  if (category && category !== 'all') {
+    query = query.eq('category', category)
+  }
+
+  const { data, error } = await query
+
+  if (error) {
+    console.error(error)
+    return []
+  }
   return (data as Question[]) ?? []
 }
 
-export default async function ArchivePage() {
-  const questions = await getQuestions()
+export default async function ArchivePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>
+}) {
+  // ✅ searchParams 처리
+  const params = await searchParams
+  const selectedCategory = params?.category
 
+  const questions = await getQuestions(selectedCategory)
   const categories = ['eviction', 'roommate', 'management'] as const
 
   return (
@@ -45,42 +61,172 @@ export default async function ArchivePage() {
           </p>
         </div>
 
-        {/* 카테고리별 필터 링크 */}
+        {/* ✅ 카테고리별 필터 버튼 - 클릭 시 필터링 */}
         <div style={{ display: 'flex', gap: 8, marginBottom: '2rem', flexWrap: 'wrap' }}>
-          <Link href="/archive" style={{ padding: '6px 16px', borderRadius: 20, fontSize: 13, fontWeight: 700, background: '#111', color: 'white', textDecoration: 'none' }}>전체</Link>
+          <Link
+            href="/archive"
+            style={{
+              padding: '6px 16px',
+              borderRadius: 20,
+              fontSize: 13,
+              fontWeight: 700,
+              background: !selectedCategory ? '#111' : '#f3f4f6',
+              color: !selectedCategory ? 'white' : '#6b7280',
+              textDecoration: 'none',
+              transition: 'background-color 0.2s',
+              cursor: 'pointer',
+            }}
+          >
+            전체
+          </Link>
           {categories.map(cat => (
-            <Link key={cat} href={`/archive?category=${cat}`} style={{ padding: '6px 16px', borderRadius: 20, fontSize: 13, background: 'white', color: '#6b7280', textDecoration: 'none', border: '1px solid #e5e7eb' }}>
+            <Link
+              key={cat}
+              href={`/archive?category=${cat}`}
+              style={{
+                padding: '6px 16px',
+                borderRadius: 20,
+                fontSize: 13,
+                fontWeight: 700,
+                background: selectedCategory === cat ? '#111' : 'white',
+                color: selectedCategory === cat ? 'white' : '#6b7280',
+                textDecoration: 'none',
+                border: `1px solid ${selectedCategory === cat ? '#111' : '#e5e7eb'}`,
+                transition: 'all 0.2s',
+                cursor: 'pointer',
+              }}
+            >
               {CATEGORY_EMOJI[cat]} {CATEGORY_LABEL[cat]}
             </Link>
           ))}
         </div>
 
+        {/* ✅ 필터링된 결과 표시 */}
         {questions.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '4rem', color: '#9ca3af' }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>📭</div>
-            <p style={{ fontSize: 14 }}>아직 저장된 고민이 없어요. 먼저 AI 기능을 사용해보세요!</p>
+            <p style={{ fontSize: 14 }}>
+              {selectedCategory
+                ? `${CATEGORY_LABEL[selectedCategory as keyof typeof CATEGORY_LABEL]}에 해당하는 고민이 없어요. 다른 카테고리를 선택해보세요!`
+                : '아직 저장된 고민이 없어요. 먼저 AI 기능을 사용해보세요!'}
+            </p>
             <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginTop: 20 }}>
-              <Link href="/eviction-defense" style={{ padding: '8px 18px', borderRadius: 10, background: '#2563eb', color: 'white', textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>퇴거 방어기</Link>
-              <Link href="/roommate-peace" style={{ padding: '8px 18px', borderRadius: 10, background: '#059669', color: 'white', textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>룸메이트 협정기</Link>
-              <Link href="/management-check" style={{ padding: '8px 18px', borderRadius: 10, background: '#d97706', color: 'white', textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>관리비 검사기</Link>
+              <Link
+                href="/eviction-defense"
+                style={{
+                  padding: '8px 18px',
+                  borderRadius: 10,
+                  background: '#2563eb',
+                  color: 'white',
+                  textDecoration: 'none',
+                  fontSize: 13,
+                  fontWeight: 600,
+                  transition: 'background-color 0.2s',
+                }}
+              >
+                퇴거 방어기
+              </Link>
+              <Link
+                href="/roommate-peace"
+                style={{
+                  padding: '8px 18px',
+                  borderRadius: 10,
+                  background: '#059669',
+                  color: 'white',
+                  textDecoration: 'none',
+                  fontSize: 13,
+                  fontWeight: 600,
+                  transition: 'background-color 0.2s',
+                }}
+              >
+                룸메이트 협정기
+              </Link>
+              <Link
+                href="/management-check"
+                style={{
+                  padding: '8px 18px',
+                  borderRadius: 10,
+                  background: '#d97706',
+                  color: 'white',
+                  textDecoration: 'none',
+                  fontSize: 13,
+                  fontWeight: 600,
+                  transition: 'background-color 0.2s',
+                }}
+              >
+                관리비 검사기
+              </Link>
             </div>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {questions.map(q => (
               <Link key={q.id} href={`/archive/${q.slug}`} style={{ textDecoration: 'none' }}>
-                <div style={{ background: 'white', borderRadius: 14, border: '1px solid #e5e7eb', padding: '1rem 1.25rem', transition: 'box-shadow 0.15s', display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                  <div style={{ fontSize: 22, flexShrink: 0, marginTop: 2 }}>{CATEGORY_EMOJI[q.category]}</div>
+                <div
+                  style={{
+                    background: 'white',
+                    borderRadius: 14,
+                    border: '1px solid #e5e7eb',
+                    padding: '1rem 1.25rem',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: 12,
+                    cursor: 'pointer',
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget as HTMLDivElement
+                    el.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'
+                    el.style.transform = 'translateY(-2px)'
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget as HTMLDivElement
+                    el.style.boxShadow = 'none'
+                    el.style.transform = 'translateY(0)'
+                  }}
+                >
+                  <div style={{ fontSize: 22, flexShrink: 0, marginTop: 2 }}>
+                    {CATEGORY_EMOJI[q.category]}
+                  </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: 11, fontWeight: 700, background: q.category === 'eviction' ? '#eff6ff' : q.category === 'roommate' ? '#ecfdf5' : '#fffbeb', color: q.category === 'eviction' ? '#1d4ed8' : q.category === 'roommate' ? '#065f46' : '#92400e', padding: '2px 8px', borderRadius: 10 }}>
+                      <span
+                        style={{
+                          fontSize: 11,
+                          fontWeight: 700,
+                          background:
+                            q.category === 'eviction'
+                              ? '#eff6ff'
+                              : q.category === 'roommate'
+                                ? '#ecfdf5'
+                                : '#fffbeb',
+                          color:
+                            q.category === 'eviction'
+                              ? '#1d4ed8'
+                              : q.category === 'roommate'
+                                ? '#065f46'
+                                : '#92400e',
+                          padding: '2px 8px',
+                          borderRadius: 10,
+                        }}
+                      >
                         {CATEGORY_LABEL[q.category]}
                       </span>
                       <span style={{ fontSize: 11, color: '#9ca3af' }}>
                         {new Date(q.created_at).toLocaleDateString('ko-KR')}
                       </span>
                     </div>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: '#111', lineHeight: 1.5, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <div
+                      style={{
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: '#111',
+                        lineHeight: 1.5,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
                       {q.title}
                     </div>
                   </div>
