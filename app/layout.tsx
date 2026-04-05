@@ -33,6 +33,8 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
           crossOrigin="anonymous"
         />
+        <meta name="naver-site-verification" content="8edab4ea5aa6e91021852cf4b4247ba1a4f9a030" />
+
       </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
