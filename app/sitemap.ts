@@ -2,7 +2,8 @@
 import { supabase } from '@/lib/supabase'
 import { MetadataRoute } from 'next'
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://smart-jachi-manager.vercel.app'
+// ✅ 수정: kkulter.com으로 변경
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://kkulter.com'
 
 export const revalidate = 3600
 
