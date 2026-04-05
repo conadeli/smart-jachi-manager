@@ -90,7 +90,7 @@ function buildPrompt(feature: Feature, data: Record<string, string>) {
 
   if (feature === 'roommate') {
     const conflicts = Array.isArray(data.conflicts) ? data.conflicts : [data.conflicts]
-    const title = `룸메이트 갈등 해결 - ${conflicts.slice(0, 2).join(', ')} 등`
+    const title = `룸메이트 갈등 해결 - ${(conflicts as string[]).slice(0, 2).join(', ')} 등`
     return {
       title,
       system: `당신은 공정한 룸메이트 생활 규칙 중재자입니다. 갈등 항목을 분석해 모두가 동의할 수 있는 공평한 생활 규칙을 만들어줍니다.
