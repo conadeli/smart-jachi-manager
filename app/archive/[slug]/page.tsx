@@ -110,7 +110,7 @@ function renderResult(category: string, result: Record<string, unknown>) {
           </div>
         ) : null}
         {/* 광고 — 협상 문구 아래 */}
-        <AdSense slot="1234567890" style={{ display: 'block', margin: '0.5rem 0' }} />
+        <AdSense adSlot="1234567890" />
         {Array.isArray(result.tips) && result.tips.length > 0 ? (
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#111', marginBottom: 8 }}>💡 대응 팁</div>
@@ -148,7 +148,7 @@ function renderResult(category: string, result: Record<string, unknown>) {
           </div>
         ) : null}
         {/* 광고 — 규칙 아래, 협정서 위 */}
-        <AdSense slot="2345678901" style={{ display: 'block', margin: '0.5rem 0' }} />
+        <AdSense adSlot="2345678901" />
         {result.agreement ? (
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: '#111', marginBottom: 8 }}>📝 생활 협정서</div>
@@ -172,7 +172,7 @@ function renderResult(category: string, result: Record<string, unknown>) {
         <p style={{ fontSize: 13, color: '#374151', lineHeight: 1.7, margin: 0, textAlign: 'left' }}>{result.reason as string}</p>
       </div>
       {/* 광고 — 별점 결과 아래 */}
-      <AdSense slot="3456789012" style={{ display: 'block', margin: '0.5rem 0' }} />
+      <AdSense adSlot="3456789012" />
       {Array.isArray(result.hiddenCosts) && result.hiddenCosts.length > 0 ? (
         <div style={{ background: '#fef2f2', borderRadius: 12, padding: '1.25rem' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: '#b91c1c', marginBottom: 8 }}>⚠️ 숨겨진 비용 가능성</div>
@@ -222,7 +222,7 @@ export default async function ArchiveDetailPage({ params }: Props) {
 
       {/* 상단 광고 — 헤더 바로 아래 */}
       <div style={{ maxWidth: 680, margin: '0 auto', padding: '1rem 1.5rem 0' }}>
-        <AdSense slot="4567890123" format="horizontal" style={{ display: 'block' }} />
+      <AdSense adSlot="4567890123" />
       </div>
 
       <div style={{ maxWidth: 680, margin: '0 auto', padding: '1.5rem 1.5rem 5rem' }}>
@@ -249,7 +249,7 @@ export default async function ArchiveDetailPage({ params }: Props) {
         {/* 하단 CTA + 광고 */}
         <div style={{ marginTop: '1.5rem' }}>
           {/* 광고 — 다운로드 버튼 위 */}
-          <AdSense slot="5678901234" style={{ display: 'block', marginBottom: '1rem' }} />
+          <AdSense adSlot="5678901234" />
 
           <div style={{ padding: '1.25rem', background: 'white', borderRadius: 14, border: '1px solid #e5e7eb' }}>
             <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 12px' }}>비슷한 상황이신가요? 직접 AI에게 물어보세요.</p>
