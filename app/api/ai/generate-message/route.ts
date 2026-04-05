@@ -18,7 +18,7 @@ function getIp(request: NextRequest): string {
 }
 
 // ── 사용 횟수 체크 & 증가 ─────────────────────────────────
-async function checkAndIncrementUsage(ip: string): Promise
+async function checkAndIncrementUsage(ip: string): Promise<
   { allowed: boolean; dailyLeft: number; monthlyLeft: number }
 > {
   const today = new Date().toISOString().slice(0, 10)   // "2026-04-04"
