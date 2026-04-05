@@ -27,28 +27,49 @@ export default function HomePage() {
   const [recentQuestions, setRecentQuestions] = useState<Question[]>([]);
 
   useEffect(() => {
-    // 간단하게 더미 데이터로 표시 (나중에 Supabase 연동)
+    // Supabase의 실제 데이터로 업데이트
     setRecentQuestions([
       {
         id: '1',
-        slug: 'no-cause-eviction-response',
-        category: 'eviction',
-        title: '정당한 사유 없는 퇴거 요구, 어떻게 대응할까요?',
-        created_at: new Date().toISOString(),
+        slug: 'roommate-1775222285259',
+        category: 'roommate',
+        title: '룸메이트와의 갈등, 공동생활 규칙을 어떻게 정해야 할까요?',
+        created_at: '2026-04-03',
       },
       {
         id: '2',
-        slug: 'roommate-noise-complaint',
-        category: 'roommate',
-        title: '룸메이트가 밤 10시 이후에도 시끄러워요',
-        created_at: new Date().toISOString(),
+        slug: 'eviction-1775221847380',
+        category: 'eviction',
+        title: '파손 부위에 대한 책임 구분, 정당한 사유 없는 퇴거 요구에 대응하기',
+        created_at: '2026-04-03',
       },
       {
         id: '3',
-        slug: 'management-fee-dispute',
-        category: 'management',
-        title: '관리비가 갑자기 올랐는데 근거가 없어요',
-        created_at: new Date().toISOString(),
+        slug: 'roommate-1775313997120',
+        category: 'roommate',
+        title: '룸메이트와의 갈등, 공동생활 규칙을 어떻게 정해야 할까요?',
+        created_at: '2026-04-04',
+      },
+      {
+        id: '4',
+        slug: 'roommate-1775306704908',
+        category: 'roommate',
+        title: '룸메이트와의 갈등, 공동생활 규칙을 어떻게 정해야 할까요?',
+        created_at: '2026-04-04',
+      },
+      {
+        id: '5',
+        slug: 'roommate-1775224014353',
+        category: 'roommate',
+        title: '룸메이트와의 갈등, 공동생활 규칙을 어떻게 정해야 할까요?',
+        created_at: '2026-04-03',
+      },
+      {
+        id: '6',
+        slug: 'roommate-1775222285259',
+        category: 'roommate',
+        title: '룸메이트와의 갈등, 공동생활 규칙을 어떻게 정해야 할까요?',
+        created_at: '2026-04-03',
       },
     ]);
   }, []);
